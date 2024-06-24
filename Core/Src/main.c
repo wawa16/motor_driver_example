@@ -18,6 +18,7 @@
 #include "main.h"
 #include "drv8701p.h"
 
+// Initialized once, used within this module only
 static uint32_t lastUpdateTime = 0;
 
 /* Private variables ---------------------------------------------------------*/
@@ -40,15 +41,15 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
 
-
-
   while (1)
   {
       uint32_t currentTime = HAL_GetTick();  // ms
 
       if (currentTime - lastUpdateTime >= 1) {
+
           // This function is called at 1khz by the application as required
           drv8701p_elapse_1ms();
+
           lastUpdateTime = currentTime; // Update the last update time
       }
   }

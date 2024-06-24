@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 Dometic
+ * All rights reserved.
+ *
+ * Description: DRV8701P API header file
+ * Author: Waleed Uddin
+*/
+
 #ifndef DRV8701P_H
 #define DRV8701P_H
 

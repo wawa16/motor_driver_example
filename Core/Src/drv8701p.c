@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2024 Dometic
+ * All rights reserved.
+ *
+ * Description: DRV8701P API source file
+ * Author: Waleed Uddin
+*/
+
 #include "drv8701p.h"
 
 // Initialized once, usable by this module only
