@@ -90,8 +90,10 @@ void drv8701p_elapse_1ms(void) {
         // Assume a forward motion
         move(FORWARD, currentPWMValue);
     }
-    else {
-        // Apply low-side slow decay during off portion of each PWM cycle
+}
+
+void drv8701p_apply_slow_decay(void) {
+    if (currentPWMValue > 0 && currentPWMValue < PWM_MAX) {
         set_mode(LOWSIDE_SLOW_DECAY);
     }
 }

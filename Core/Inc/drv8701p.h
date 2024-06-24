@@ -11,8 +11,8 @@
 
 #include "hal_aio.h"
 
-#define DEFAULT_SLEW_RATE 100 // 1% per millisecond increment
 #define PWM_MAX 10000 // 10000 is the max duty cycle
+#define DEFAULT_SLEW_RATE 100 // 1% per millisecond increment
 
 typedef enum
 {
@@ -64,6 +64,12 @@ void move(direction dir, uint16_t value);
  * @param slewRate: desired slew rate to be set
  */
 void set_slew_rate(uint16_t slewRate);
+
+/*
+ * Called by an application to apply slow decay during off PWM portion
+ *
+ */
+void drv8701p_apply_slow_decay(void);
 
 extern uint16_t slewRate_;
 

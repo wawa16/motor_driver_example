@@ -47,10 +47,18 @@ int main(void)
 
       if (currentTime - lastUpdateTime >= 1) {
 
-          // This function is called at 1khz by the application as required
+          // Example usage e.g. set PWM to 50% duty cycle
+          drv8701p_set_command(5000);
+
+          // This function is called at 1khz by the application as required. It processes PWM commands
+          // with a set slew rate
           drv8701p_elapse_1ms();
 
           lastUpdateTime = currentTime; // Update the last update time
+      }
+      else {
+          // Ensure slow decay enabled when PWM cycle is not occurring
+          drv8701p_apply_slow_decay();
       }
   }
 }
