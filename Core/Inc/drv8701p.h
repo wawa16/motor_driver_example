@@ -65,6 +65,6 @@ void move(direction dir, uint16_t value);
  */
 void set_slew_rate(uint16_t slewRate);
 
-uint16_t slewRate_;
+extern uint16_t slewRate_;
 
 #endif // DRV8701P_H

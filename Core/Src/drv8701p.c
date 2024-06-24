@@ -11,6 +11,7 @@
 // Initialized once, usable by this module only
 static uint16_t currentPWMValue = 0;
 static uint16_t targetPWMValue = 0;
+uint16_t slewRate_ = 0;
 
 void drv8701p_init(void) {
     // Sets to the required slew rate of 1% per ms
