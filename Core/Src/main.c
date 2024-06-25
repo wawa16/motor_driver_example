@@ -22,7 +22,7 @@
 static uint32_t lastUpdateTime = 0;
 
 /* Private variables ---------------------------------------------------------*/
-// TIM_HandleTypeDef htim2;
+ TIM_HandleTypeDef htim2;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -51,14 +51,10 @@ int main(void)
           drv8701p_set_command(5000);
 
           // This function is called at 1khz by the application as required. It processes PWM commands
-          // with a set slew rate
+          // with a set slew rate, alternatively we could leverage HAL's periodCallback (HAL_TIM_PeriodElapsedCallback)
           drv8701p_elapse_1ms();
 
           lastUpdateTime = currentTime; // Update the last update time
-      }
-      else {
-          // Ensure slow decay enabled when PWM cycle is not occurring
-          drv8701p_apply_slow_decay();
       }
   }
 }
@@ -69,48 +65,47 @@ int main(void)
   */
 void SystemClock_Config(void)
 {
-    /*Not within the scope of our assignment.
-    Meant to be an example configuration that may need tweaking, all auto-generated and commented out.*/
+  /*Auto-generated - Meant to be an example configuration that may need tweaking.*/
 
-  //RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  //RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  ///** Configure the main internal regulator output voltage
-  //*/
-  //__HAL_RCC_PWR_CLK_ENABLE();
-  //__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+  /** Configure the main internal regulator output voltage
+  */
+  __HAL_RCC_PWR_CLK_ENABLE();
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
 
-  ///** Initializes the RCC Oscillators according to the specified parameters
-  //* in the RCC_OscInitTypeDef structure.
-  //*/
-  //RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  //RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  //RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  //RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  //RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  //RCC_OscInitStruct.PLL.PLLM = 8;
-  //RCC_OscInitStruct.PLL.PLLN = 84;
-  //RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  //RCC_OscInitStruct.PLL.PLLQ = 2;
-  //RCC_OscInitStruct.PLL.PLLR = 2;
-  //if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  //{
-  //  Error_Handler();
-  //}
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 84;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLR = 2;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+   Error_Handler();
+  }
 
-  ///** Initializes the CPU, AHB and APB buses clocks
-  //*/
-  //RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-  //                            |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  //RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  //RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  //RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  //RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                             |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  //if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  //{
-  //  Error_Handler();
-  //}
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  {
+   Error_Handler();
+  }
 }
 
 /**
@@ -120,13 +115,15 @@ void SystemClock_Config(void)
   */
 static void MX_TIM2_Init(void)
 {
-    /*Not within the scope of our assignment.
-    Meant to be an example configuration that may need tweaking, all auto-generated and commented out.*/
+  /*Auto-generated - Meant to be an example configuration that may need tweaking.*/
 
- /* TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
-   
+
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+  
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -164,7 +161,23 @@ static void MX_TIM2_Init(void)
   {
     Error_Handler();
   }
-  HAL_TIM_MspPostInit(&htim2);*/
+  HAL_TIM_MspPostInit(&htim2);
+
+  // Enable interrupt for TIM2
+  HAL_NVIC_SetPriority(TIM2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM2_IRQn);
+}
+
+// TIM2-PWM Interrupt Handler
+void TIM2_IRQHandler(void) {
+    HAL_TIM_IRQHandler(&htim2);
+}
+
+// Callback invoked after active PWM portion ends - for channel 1 as example i.e. for forward motion
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
+    if (htim->Instance == TIM2 && htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1) {
+        drv8701p_apply_slow_decay();
+    }
 }
 
 /**
@@ -174,23 +187,22 @@ static void MX_TIM2_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-    /*Not within the scope of our assignment.
-    Meant to be an example configuration that may need tweaking, all auto-generated and commented out.*/
+    /*Auto-generated - Meant to be an example configuration that may need tweaking.*/
 
-  //GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  ///* GPIO Ports Clock Enable */
-  //__HAL_RCC_GPIOA_CLK_ENABLE();
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
-  ///*Configure GPIO pin Output Level */
-  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
 
-  ///*Configure GPIO pin : PA2 */
-  //GPIO_InitStruct.Pin = GPIO_PIN_2;
-  //GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  //GPIO_InitStruct.Pull = GPIO_NOPULL;
-  //GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  //HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  /*Configure GPIO pin : PA2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
 /**

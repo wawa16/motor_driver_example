@@ -93,7 +93,5 @@ void drv8701p_elapse_1ms(void) {
 }
 
 void drv8701p_apply_slow_decay(void) {
-    if (currentPWMValue > 0 && currentPWMValue < PWM_MAX) {
-        set_mode(LOWSIDE_SLOW_DECAY);
-    }
+    set_mode(LOWSIDE_SLOW_DECAY);
 }
